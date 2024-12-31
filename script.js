@@ -1,8 +1,9 @@
 let score = 0;
 let roundsPlayed = 0;
-let bestScore = 0;
+let bestScore = localStorage.getItem('bestScore') || 0;
+let isAnimating = false;
 
-// Get references to the buttons and result elements
+// Get references to elements
 const headsButton = document.getElementById('heads');
 const tailsButton = document.getElementById('tails');
 const resetButton = document.getElementById('reset');
@@ -10,57 +11,80 @@ const resultText = document.getElementById('result-text');
 const scoreText = document.getElementById('score-text');
 const bestScoreText = document.getElementById('best-score');
 const gameOverText = document.getElementById('game-over');
+const roundsLeftText = document.getElementById('rounds-left');
+const progressBar = document.getElementById('progress');
+const coin = document.querySelector('.coin');
 
-// Function to generate a random result (heads or tails)
+// Initialize best score display
+bestScoreText.textContent = bestScore;
+
+// Function to update progress bar
+function updateProgress() {
+    const progress = (roundsPlayed / 10) * 100;
+    progressBar.style.width = `${progress}%`;
+}
+
+// Function to generate a random result
 function flipCoin() {
     return Math.random() < 0.5 ? 'heads' : 'tails';
 }
 
+// Function to animate the coin flip
+function animateCoin(result) {
+    return new Promise((resolve) => {
+        coin.classList.add('flipping');
+        
+        setTimeout(() => {
+            coin.classList.remove('flipping');
+            coin.style.transform = result === 'heads' ? 'rotateY(0)' : 'rotateY(180deg)';
+            resolve();
+        }, 1500);
+    });
+}
+
 // Function to handle the user's guess
-function handleGuess(userGuess) {
-    if (roundsPlayed >= 10) {
-        return; // Stop the game after 10 rounds
-    }
-
+async function handleGuess(userGuess) {
+    if (roundsPlayed >= 10 || isAnimating) return;
+    
+    isAnimating = true;
     const result = flipCoin();
+    
+    // Disable buttons during animation
+    headsButton.disabled = true;
+    tailsButton.disabled = true;
+    
+    await animateCoin(result);
+    
     roundsPlayed++;
-
-    // Play sound effect
-    const coinSound = new Audio('coin-flip.mp3');
-    coinSound.play();
-
-    // Display coin flip animation
-    const coin = document.createElement('div');
-    coin.className = 'coin';
-    coin.textContent = result.toUpperCase();
-    resultText.innerHTML = '';
-    resultText.appendChild(coin);
-
-    // Check if the user guessed correctly
+    updateProgress();
+    
     if (userGuess === result) {
         score++;
-        resultText.appendChild(document.createTextNode(`You guessed correctly!`));
+        resultText.textContent = '🎉 Correct!';
+        resultText.style.color = '#4CAF50';
     } else {
-        resultText.appendChild(document.createTextNode(`You guessed wrong.`));
+        resultText.textContent = '❌ Wrong!';
+        resultText.style.color = '#ff5252';
     }
-
-    // Update the score display
-    scoreText.textContent = `Score: ${score} / ${roundsPlayed}`;
-
-    // Check if the game is over
+    
+    scoreText.textContent = `${score} / ${roundsPlayed}`;
+    roundsLeftText.textContent = 10 - roundsPlayed;
+    
     if (roundsPlayed === 10) {
-        if (score > 5) {
-            gameOverText.textContent = "Congratulations! You won the game!";
-        } else {
-            gameOverText.textContent = "Game over! You didn't guess enough correctly.";
-        }
-
-        // Update the best score
         if (score > bestScore) {
             bestScore = score;
-            bestScoreText.textContent = `Best Score: ${bestScore}`;
+            localStorage.setItem('bestScore', bestScore);
+            bestScoreText.textContent = bestScore;
+            gameOverText.innerHTML = `🏆 New High Score: ${score}!<br>Can you beat it?`;
+        } else {
+            gameOverText.textContent = `Game Over! Final Score: ${score}`;
         }
     }
+    
+    // Re-enable buttons
+    headsButton.disabled = false;
+    tailsButton.disabled = false;
+    isAnimating = false;
 }
 
 // Function to reset the game
@@ -68,11 +92,15 @@ function resetGame() {
     score = 0;
     roundsPlayed = 0;
     resultText.textContent = '';
-    scoreText.textContent = 'Score: 0 / 0';
+    scoreText.textContent = '0 / 0';
     gameOverText.textContent = '';
+    roundsLeftText.textContent = '10';
+    progressBar.style.width = '0%';
+    coin.style.transform = 'rotateY(0)';
+    resultText.style.color = '#1e3c72';
 }
 
-// Add event listeners to the buttons
+// Add event listeners
 headsButton.addEventListener('click', () => handleGuess('heads'));
 tailsButton.addEventListener('click', () => handleGuess('tails'));
 resetButton.addEventListener('click', resetGame);
