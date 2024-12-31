@@ -1,41 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coin Flip Game</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Flip Challenge</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1>Coin Flip Game</h1>
-    <div class="coin" id="coin">
-      <div class="side front"></div>
-      <div class="side back"></div>
+    <div class="container">
+        <h1>Coin Flip Challenge</h1>
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-label">Current Score</div>
+                <div class="stat-value" id="score-text">0 / 0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Best Score</div>
+                <div class="stat-value" id="best-score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Rounds Left</div>
+                <div class="stat-value" id="rounds-left">10</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="coin">
+            <div class="coin-face coin-front">H</div>
+            <div class="coin-face coin-back">T</div>
+        </div>
+
+        <div class="game">
+            <button id="heads">Heads</button>
+            <button id="tails">Tails</button>
+        </div>
+
+        <div class="results">
+            <p id="result-text"></p>
+            <p id="game-over"></p>
+            <button id="reset">New Game</button>
+        </div>
     </div>
-    <div class="buttons">
-      <button id="heads">Heads</button>
-      <button id="tails">Tails</button>
-    </div>
-    <div class="result" id="result"></div>
-    <!-- Add the table here -->
-    <div class="table-container">
-      <h2>Attempts</h2>
-      <table id="attempts-table">
-        <thead>
-          <tr>
-            <th>Attempt</th>
-            <th>Your Guess</th>
-            <th>Result</th>
-            <th>Outcome</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Rows will be added dynamically -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <script src="script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
