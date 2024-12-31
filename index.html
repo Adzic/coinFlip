@@ -3,25 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heads or Tails Game</title>
+    <title>Coin Flip Challenge</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Heads or Tails Guessing Game</h1>
-        <p>Guess whether the coin will land on heads or tails. If you guess correctly more than 5 times out of 10, you win!</p>
-        
+        <h1>Coin Flip Challenge</h1>
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-label">Current Score</div>
+                <div class="stat-value" id="score-text">0 / 0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Best Score</div>
+                <div class="stat-value" id="best-score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Rounds Left</div>
+                <div class="stat-value" id="rounds-left">10</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="coin">
+            <div class="coin-face coin-front">H</div>
+            <div class="coin-face coin-back">T</div>
+        </div>
+
         <div class="game">
             <button id="heads">Heads</button>
             <button id="tails">Tails</button>
-            <button id="reset">Reset Game</button>
         </div>
 
         <div class="results">
             <p id="result-text"></p>
-            <p id="score-text"></p>
-            <p id="best-score"></p>
             <p id="game-over"></p>
+            <button id="reset">New Game</button>
         </div>
     </div>
 
